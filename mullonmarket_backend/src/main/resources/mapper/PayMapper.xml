@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.PayMapper">
+
+	<insert id="insert">
+		insert into tbl_pay(pcode,paycode,payprice,seller,buyer,paytype,payemail)
+		values(#{pcode},#{paycode},#{payprice},#{seller},#{buyer},#{paytype},#{payemail})
+	</insert>
+
+	<select id="list" resultType="com.example.domain.PayVO">
+		select * from tbl_pay
+	</select>
+
+
+	<update id="updateSellerCondition">
+		update tbl_pay set sellercondition=1 where paycode=#{paycode}
+	</update>
+	
+	<update id="updateBuyerCondition">
+		update tbl_pay set buyercondition=1 where paycode=#{paycode}
+	</update>
+	
+	<select id="read" resultType="com.example.domain.PayVO">
+		select * from tbl_pay where paycode=#{paycode}
+	</select>
+	
+	
+
+</mapper>

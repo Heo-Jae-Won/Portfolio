@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.TradeInfoMapper">
+	<select id="buyList" resultType="com.example.domain.PayVO">
+		select payprice, buyer,seller,paycode,pcode,buyercondition, regDate from
+		tbl_pay where buyer=#{buyer}
+		order by regDate
+		limit #{start}, 6
+	</select>
+	<select id="sellList" resultType="com.example.domain.PayVO">
+		select payprice, buyer,seller,paycode,pcode, regDate,sellercondition from
+		tbl_pay where seller=#{seller}
+		order by regDate
+		limit #{start}, 6
+	</select>
+
+	<select id="buyTotal" resultType="int">
+		select count(*) from tbl_pay where buyer=#{buyer}
+	</select>
+
+	<select id="sellTotal" resultType="int">
+		select count(*) from tbl_pay where buyer=#{seller}
+	</select>
+
+	<select id="sellchart" resultType="Hashmap">
+		select
+		month(aa.tmonth) month,
+		 ifnull(sum(p.payprice),0) payprice
+       
+	from
+		temp_month aa
+			left join 
+            	tbl_pay p 
+                on (month(p.regDate) = month(aa.tmonth) and p.seller=#{seller})
+    		group by 
+            	tmonth;
+	</select>
+	
+	<select id="buychart" resultType="Hashmap">
+		select
+		month(aa.tmonth) month,
+		 ifnull(sum(p.payprice),0) payprice
+       
+	from
+		temp_month aa
+			left join 
+            	tbl_pay p 
+                on (month(p.regDate) = month(aa.tmonth) and p.buyer=#{buyer})
+    		group by 
+            	tmonth;
+	</select>
+	
+</mapper>
