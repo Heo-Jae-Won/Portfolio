@@ -1,0 +1,99 @@
+<html>
+
+<body>
+    <form name="frm" enctype="multipart/form-data">
+        <table>
+            <tr>
+                <td>코드</td>
+                <td> <input id="code" type="text" name="code" value="<%=row.code%>" readonly></td>
+            </tr>
+            <tr>
+                <td>가격</td>
+                <td> <input id="price" type="number" name="price" value="<%=row.price%>"></td>
+            </tr>
+            <tr>
+                <td>이미지</td>
+                <td>
+                    <%if(row.image!==''){%><img id="photo" src="/images/<%=row.image%>" width=" 50">
+                        <%}%>
+                            <%if(row.image===''){%> <img id="photo" src="https://dummyimage.com/200x200" width="50">
+                                <%}%>
+                                    <input type="file" id="image" name="image" style="display:none">
+                                    <input type="hidden" value="<%=row.image%>" id="old" name="old">
+                </td>
+            </tr>
+
+            <tr>
+                <td>이름</td>
+                <td> <input id="name" type="text" name="name" value="<%=row.name%>"></td>
+            </tr>
+            <tr>
+                <td><button id="updateBtn" type="button">수정</button></td>
+                <td><button id="listBtn" type="button">목록으로</button></td>
+            </tr>
+
+        </table>
+    </form>
+</body>
+
+</html>
+
+<script>
+    /*     let code = $(frm.code).val();
+        let price = $(frm.price).val();
+        let name = $(frm.name).val();
+        let image = $(frm.image).val(); */
+
+
+    $("#photo").on("click", () => {
+        $(frm.image).click();
+    })
+
+
+    $(frm.image).on("change", function (e) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $("#photo").attr("src", e.target.result);
+        }
+        reader.readAsDataURL(this.files[0]);
+    });
+
+
+
+    $("#updateBtn").on("click", function () {
+        const code = document.getElementById('code').value;
+        const name = document.getElementById('name').value;
+        const price = document.getElementById('price').value;
+        let image = document.getElementById('image').value;
+        const old = document.getElementById('old').value;
+        const formData=new FormData();
+        formData.append("code",code);
+        formData.append("name",name);
+        formData.append("price",price);
+        formData.append("image",image);
+        formData.append("old",old);
+
+        console.log(image)
+        if (!confirm("수정하시겠습니까?")) return;
+        $.ajax({
+            type: "PUT",
+            url: "/mokokos/" + code,
+            // contentType:'multipart/form-data',
+      /*       headers:{'content-type':'multipart/form-data'}, */
+ /*          contentType: false,
+            processData: false, */
+            data: formData
+        }).done(() => {
+            alert('수정이 완료되었습니다.')
+/*             location.replace('/mokokos/list');
+ */        }).fail((err)=>{
+    console.log(err.responseText)
+ })
+    })
+
+
+    $("#listBtn").on("click", () => {
+        location.href = "/mokokos/list"
+    })
+
+</script>
