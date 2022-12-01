@@ -1,0 +1,97 @@
+
+<button onclick="location.href='/mokokos/insert'">등록</button>
+<button id="delete" type="button">삭제</button>
+
+<div>
+   
+    <input id="word" type="text" placeholder="검색어를 입력하세요">
+    <select id="order">
+        
+        <option value="recent">최근순</option>
+        <option value="name">이름순</option>
+        <option value="high">높은가격순</option>
+        <option value="low">낮은가격순</option>
+    </select>
+</div>
+<table id="tbl"></table>
+<script id="tbl_Temp" type="text/x-handlebars-template">
+    <tr>
+        <td>이름</td>
+        <td>가격</td>
+        <td>이미지</td>
+        <td>코드</td>
+        <td></td>
+    
+    </tr>
+    {{#each .}}
+    <tr class="row">
+        <td onclick="location.href='/mokokos/read/{{code}}'">{{name}}</td>
+        <td>{{price}}</td>
+        <td><img src="/images/{{image}}" width="50"></td> 
+        <td class="abc" code="{{code}}">{{code}}</td>
+        <td><input type="checkbox" class="chk"></td>
+    </tr>
+    {{/each}}
+ 
+</script>
+<script>
+    getList();
+
+    $("#word").on("change", () => {
+        getList();
+    }) 
+
+
+
+    $("#order").on("click", function () {
+        getList();
+    })
+
+
+
+
+
+    $("#delete").on("click", function (e) {
+        e.preventDefault();
+        if (!confirm("정말 삭제하시겠습니까?")) return;
+
+        $("#tbl .row .chk:checked").each(function () {
+            let row = $(this).parent().parent();
+            let code = row.find(".abc").attr("code");
+            $.ajax({
+                type:"DELETE",
+                url:"/mokokos/"+code,
+               
+            }).done(()=>{
+              
+            }
+            )
+
+        })
+        alert("삭제가 완료되었습니다.");
+                getList();
+
+
+    })
+
+
+
+
+    function getList() {
+        let word = $("#word").val();
+        let order = $("#order").val();
+
+        $.ajax({
+            type: 'get',
+            url: '/mokokos',
+            dataType: 'json',
+            data: { word, order }
+        }).done(data => {
+            let source = $("#tbl_Temp").html();
+            let temp = Handlebars.compile(source);
+            let html = temp(data);
+            $("#tbl").html(html);
+        })
+    }
+
+</script>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.1/handlebars.js"></script>
+  <link rel='stylesheet' href='/stylesheets/style.css'/>
+</head>
+
+<body>
+  <div id="top">
+    <a href="/"><img src="/images/Base.jpg"></a>
+  </div>
+  <div id="middle">
+    <h3>
+      <%=title%>
+    </h3>
+    <%-include(pageName)%>
+  </div>
+  <div id="bottom">
+    <h1>Copyright 2022. ICIA All right reserved</h1>
+  </div>
+</body>
+
+</html>
