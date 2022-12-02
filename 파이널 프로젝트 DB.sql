@@ -81,17 +81,6 @@ ewriter char(4) not null,
 foreign key(ewriter) references tbl_admin(aid) 
 );
 
-#채팅 ???
- create table tbl_chat(
- id int auto_increment primary key, 
- sender varchar(30),
- receiver varchar(30),
- message text, 
- regDate datetime default now(),
- readDate datetime,                                   #읽었다면 읽었다고 표시 띄우기 위한 column. 쪽지 참고 ㄱㄱ
- foreign key(sender) references tbl_user(unickname),
- foreign key(receiver) references tbl_user(unickname)
-);
 
 #좋아요 여부
 CREATE table tbl_like_pboard(
