@@ -5,6 +5,8 @@ CREATE TABLE tbl_pboard (
     pcode char(36) primary key not null,           #상품코드                                                         상품코드가 중복되는 것을 방지하기 위해 PK로 UUID 사용
     ptitle VARCHAR(50) NOT NULL,                 #상품제목.                                                         50자 까지만 저장 가능.
     pcontent TEXT,                                       #text로 쓰면 검색 속도가 느려짐.                            pcontent도 검색대상에 포함되면 검색결과 산출이 느려짐.
+    pimage varchar(200) not null,
+    pprice int default 0,
     pwriter VARCHAR(30) NOT NULL,              #작성자.                                                             30자까지만 저장 가능.
     viewcnt int default 0,                              #조회수.transcation이 필요함.
     replycnt int default 0,
@@ -20,7 +22,7 @@ CREATE TABLE tbl_user(
     uid varchar(15) primary key,           #로그인에 사용되는 아이디.                                        15자까지
     upass varchar(100) not null,              #암호화되어 저장되는 비밀번호                                   암호화 하면 길어지기 때문에 100자는 줘야함.
     uname varchar(30) not null,              #법정 이름                                                               한국인 대상인데 혹시 몰라서 20자까지 최대제한 걸었음
-    unickname varchar(30) not null,         #페이지 상에서 출력될 별명                                       너무 길지 않게 30자 제한을 걸었음.
+    unickname varchar(30) not null unique key,         #페이지 상에서 출력될 별명                                       너무 길지 않게 30자 제한을 걸었음.
     uemail varchar(50) not null,              # 회원가입 시 이용될 이메일                                       그외로 가면 직접 입력하고 그게 아니면 골라서 넣을 수 있게 
     utel varchar(50) not null,                  # 회원가입 시 받게 될 전화번호
     uaddress varchar(100) not null,          # 회원가입 시 받게 될 주소                                         API 받아서 아파트나 빌라이름 치면 자동으로 가져오게
@@ -56,8 +58,8 @@ payemail varchar(30) not null,
 pcode varchar(36) not null,
 sellercondition int default 0,                    #0이면 후기 등록 x, 1이면  등록
 buyercondition int default 0,                  #0이면 후기 등록 x, 1이면 등록
-foreign key(seller) references tbl_user(unickname) on delete cascade on update cascade,        ㅡㅡㅡㅡ>delete cascade는 삭제
-foreign key(buyer) references tbl_user(unickname) on delete cascade on update cascade,     ㅡㅡㅡㅡㅡㅡㅡㅡ>delete cascade는 삭제
+foreign key(seller) references tbl_user(unickname)  on update cascade,       
+foreign key(buyer) references tbl_user(unickname) on update cascade,    
 foreign key(pcode) references tbl_pboard(pcode)
 );
 
@@ -80,7 +82,6 @@ econtent varchar(200) not null,
 ewriter char(4) not null,
 foreign key(ewriter) references tbl_admin(aid) 
 );
-
 
 #좋아요 여부
 CREATE table tbl_like_pboard(
@@ -125,3 +126,17 @@ foreign key(ecode) references tbl_event(ecode)
 CREATE table temp_month(
 tmonth datetime default now()
 );
+
+insert into temp_month(tmonth)
+values('2022-01-01 12:00:00'),
+('2022-02-01 12:00:00'),
+('2022-03-01 12:00:00'),
+('2022-04-01 12:00:00'),
+('2022-05-01 12:00:00'),
+('2022-06-01 12:00:00'),
+('2022-07-01 12:00:00'),
+('2022-08-01 12:00:00'),
+('2022-09-01 12:00:00'),
+('2022-10-01 12:00:00'),
+('2022-11-01 12:00:00'),
+('2022-12-01 12:00:00');
