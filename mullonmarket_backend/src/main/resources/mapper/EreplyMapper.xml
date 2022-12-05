@@ -3,7 +3,7 @@
 <mapper namespace="com.example.mapper.EreplyMapper">
 	<select id="list" resultType="com.example.domain.EreplyVO">
 		select erwriter, ercode,
-		ercontent,regDate from tbl_ereply where ecode=#{ecode}
+		ercontent,regDate,usercondition,admincondition from tbl_ereply where ecode=#{ecode}
 		limit #{start},
 		#{num}
 	</select>
